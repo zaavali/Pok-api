@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'pokemonapi.dart'; 
-import 'modelepokemon.dart';
+
 
 class PokemonDetailPage extends StatelessWidget {
   final Map<String, dynamic> pokemonDetails;
 
-  PokemonDetailPage(this.pokemonDetails);
+  const PokemonDetailPage(this.pokemonDetails, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +21,10 @@ class PokemonDetailPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Détails du Pokémon'),
+        title: const Text('Détails du Pokémon'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -34,7 +33,7 @@ class PokemonDetailPage extends StatelessWidget {
             Text('Espèce: $speciesName'),
             Text('Types: ${typeNames.join(", ")}'),
             Text('Description: $description'),
-            Text('Statistiques:'),
+            const Text('Statistiques:'),
             for (var stat in stats)
               Text('${stat['stat']['name']}: ${stat['base_stat']}'),
            
