@@ -8,18 +8,26 @@ Future<Map<String, dynamic>> fetchPokemonDetails(int id) async {
     final pokemonData = jsonDecode(response.body);
   
     final speciesUrl = pokemonData['species']['url'];
-
     final speciesResponse = await http.get(Uri.parse(speciesUrl));
+    
     if (speciesResponse.statusCode == 200) {
       final speciesData = jsonDecode(speciesResponse.body);
+      final String speciesName = speciesData['name'];
+      
+  
+      final flavorTextEntries = speciesData['flavor_text_entries'];
+      final description = flavorTextEntries.firstWhere((entry) => entry['language']['name'] == 'en', orElse: () => '')['flavor_text'];
+      
+     
+      final stats = pokemonData['stats'];
+      
       return {
         'id': pokemonData['id'],
         'name': pokemonData['name'],
         'types': pokemonData['types'],
-        'species': {
-          'name': speciesData['name'],
-         
-        },
+        'species': speciesName,
+        'description': description,
+        'stats': stats,
       };
     } else {
       throw Exception('Failed to load species data');
@@ -28,6 +36,7 @@ Future<Map<String, dynamic>> fetchPokemonDetails(int id) async {
     throw Exception('Failed to load Pokemon data');
   }
 }
+
 
 Future<List<Pokemon>> fetchPokemonList({int offset = 0}) async {
   final response = await http.get(Uri.parse('https://pokeapi.co/api/v2/pokemon/?offset=$offset&limit=20'));

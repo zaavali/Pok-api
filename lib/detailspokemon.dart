@@ -1,55 +1,6 @@
 import 'package:flutter/material.dart';
 import 'pokemonapi.dart'; 
 import 'modelepokemon.dart';
-import 'detailspokemon.dart';
-
-class PokemonListPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Pokedex'),
-      ),
-      body: FutureBuilder<List<Pokemon>>(
-        future: fetchPokemonList(),
-        builder: (context, AsyncSnapshot<List<Pokemon>> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          } else {
-           
-            List<Pokemon>? pokemonList = snapshot.data;
-            return ListView.builder(
-              itemCount: pokemonList?.length ?? 0,
-              itemBuilder: (context, index) {
-                final pokemon = pokemonList?[index];
-                final imageUrl =
-                    'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon?.id}.png';
-                return ListTile(
-                  leading: Image.network(imageUrl),
-                  title: Text(pokemon!.name),
-                  onTap: () {
-                    fetchPokemonDetails(pokemon.id).then((details) {
-               
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => PokemonDetailPage(details)),
-                      );
-                    }).catchError((error) {
-                      print('Error fetching Pokemon details: $error');
-                    });
-                  },
-                );
-              },
-            );
-          }
-        },
-      ),
-    );
-  }
-}
 
 class PokemonDetailPage extends StatelessWidget {
   final Map<String, dynamic> pokemonDetails;
@@ -59,22 +10,38 @@ class PokemonDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final int pokemonId = pokemonDetails['id'];
-    final String speciesName = pokemonDetails['species']['name'];
+    final String speciesName = pokemonDetails['species'];
+
+
+    final List<dynamic> types = pokemonDetails['types'];
+    List<String> typeNames = types.map<String>((type) => type['type']['name'] as String).toList();
+
+  
+    final String description = pokemonDetails['description'];
+    final List<dynamic> stats = pokemonDetails['stats'];
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Pokemon Details'),
+        title: Text('Détails du Pokémon'),
       ),
-      body: Center(
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Pokemon Name: ${pokemonDetails['name']}'),
-            Text('Pokemon Number: $pokemonId'),
-            Text('Pokemon Species: $speciesName'),
+            Text('Nom: ${pokemonDetails['name']}'),
+            Text('Numéro: $pokemonId'),
+            Text('Espèce: $speciesName'),
+            Text('Types: ${typeNames.join(", ")}'),
+            Text('Description: $description'),
+            Text('Statistiques:'),
+            for (var stat in stats)
+              Text('${stat['stat']['name']}: ${stat['base_stat']}'),
+           
           ],
         ),
       ),
     );
   }
 }
+

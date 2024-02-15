@@ -31,7 +31,7 @@ class _PokemonListPageState extends State<PokemonListPage> {
 
   Future<void> _loadNextPage() async {
     setState(() {
-      _offset += 20; // Load next 20 Pokemon
+      _offset += 20; 
     });
     await _loadPokemonList();
   }
