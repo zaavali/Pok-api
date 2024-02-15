@@ -111,10 +111,10 @@ class _PokemonListPageState extends State<PokemonListPage> {
         return Colors.purple;
 
       case 'dragon':
-        return Colors.deepPurpleAccent;
+        return const Color.fromARGB(255, 124, 77, 255);
 
       case 'fairy':
-        return Colors.pink;
+        return const Color.fromARGB(255, 219, 11, 191);
 
       case 'ground':
         return Colors.brown;
@@ -133,6 +133,15 @@ class _PokemonListPageState extends State<PokemonListPage> {
       case 'ice':
         return Colors.cyan;
 
+      case 'ghost':
+        return Colors.deepPurple;
+
+      case 'dark':
+        return const Color.fromARGB(255, 60, 7, 85);
+
+      case 'steel':
+        return const Color.fromARGB(255, 73, 73, 73);
+        
       default:
         return Colors.black;
     }
