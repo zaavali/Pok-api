@@ -52,8 +52,18 @@ class _PokemonListPageState extends State<PokemonListPage> {
             final imageUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png';
             return ListTile(
               leading: Image.network(imageUrl),
-              title: Text(pokemon.name),
-              subtitle: Text('Number: ${pokemon.id}, Types: ${pokemon.types.join(", ")}'),
+              title: Text(
+                pokemon.name,
+                style: TextStyle(
+                  color: _getColorForType(pokemon.types.first), 
+                ),
+              ),
+              subtitle: Text(
+                'Number: ${pokemon.id}, Types: ${pokemon.types.join(", ")}',
+                style: TextStyle(
+                  fontStyle: _getFontStyleForType(pokemon.types.first), 
+                ),
+              ),
               onTap: () => _showPokemonDetails(pokemon),
             );
           }
@@ -66,7 +76,7 @@ class _PokemonListPageState extends State<PokemonListPage> {
     return Center(
       child: ElevatedButton(
         onPressed: _loadNextPage,
-        child: Text('Load More'),
+        child: Text('Voir +'),
       ),
     );
   }
@@ -81,5 +91,34 @@ class _PokemonListPageState extends State<PokemonListPage> {
       print('Error fetching Pokemon details: $error');
     });
   }
-}
 
+  
+  Color _getColorForType(String type) {
+    switch (type) {
+      case 'fire':
+        return Colors.red;
+      case 'water':
+        return Colors.blue;
+      case 'grass':
+        return Colors.green;
+   
+      default:
+        return Colors.black;
+    }
+  }
+
+  
+  FontStyle _getFontStyleForType(String type) {
+    switch (type) {
+      case 'fire':
+        return FontStyle.normal;
+      case 'water':
+        return FontStyle.italic;
+      case 'grass':
+        return FontStyle.normal;
+   
+      default:
+        return FontStyle.normal;
+    }
+  }
+}
